@@ -22,7 +22,43 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
     if (isupper(board[to.first][to.second]) && isupper(p) || islower(board[to.first][to.second]) && islower(p)) {
         cout << "Pieces have not unlocked phantasmal abilities yet.\n";
         return false;
+    } //Tried to move piece to a position occupied by the same team piece.
+
+    if (p == 'P') {
+        if (from.second == to.second) {
+
+            if (from.first - 1 == to.first &&
+                board[to.first][to.second] == '*') {
+            }
+            else if (from.first - 2 == to.first && from.first == 6) {
+
+                for (int i = from.first - 1; i >= to.first; i--) {
+                    if (board[i][to.second] != '*') {
+                        return false;
+                    }
+                }
+
+            }
+            else {
+                return false;
+            }
+
+        }
+        else if (
+            from.first - 1 == to.first &&
+            (from.second - 1 == to.second || from.second + 1 == to.second) &&
+            islower(board[to.first][to.second])
+        ) {
+        }
+        else {
+            cout << "Tried to move piece sideways! Or you moved more spaces \n";
+            return false;
+        }
+
+    return true;
     }
+
+
 
     return true;
 }
@@ -125,7 +161,8 @@ int main() {
                     }
                 }
             } else {
-                cout << "You seleceted an empty space, or the enemies pieces.";
+                cout << "You selected an empty space, or the enemies pieces.";
+                Sleep(500);
 
             }
 
