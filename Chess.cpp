@@ -11,11 +11,36 @@ using namespace std;
 #define GREEN "\033[32m"
 #define RESET "\033[0m"
 
+pair<int, int> FindKing(vector<vector<char>>& board, char king) {
+    for (int row = 0; row < board.size(); row++) {
+        for (int col = 0; col < board[row].size(); col++) {
+            if (board[row][col] == 'K') {
+                return {row, col};
+            }
+        }
+    }
+
+    return {-1, -1};
+}
+
 pair<int, int> LocalizePiece(vector<vector<char>>& board, string position) {
     int col = position[0] - 'a';
     int row = 8 - (position[1] - '0');
 
     return {row, col};
+}
+
+bool InCheck(vector<vector<char>>& board, char king) {
+    pair<int, int> KingPos = FindKing(board, king);
+
+    if (KingPos == {-1, -1}) {
+        return false;
+    }
+
+    int kx = KingPos.first; //Returns the row of the king
+    int ky = KingPos.second; //Returns the col of the king
+
+
 }
 
 bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char p) {
@@ -392,7 +417,7 @@ int main() {
 
                     if (IsValidPos(board, selectPos, lastPos, piece)) {
                         MovePiece(board, selectPos, lastPos, piece);
-                        //turnOrder = 1;
+                        turnOrder = 1;
                     } else {
                         cout << "Invalid move!" << endl;
                         Sleep(1000);
