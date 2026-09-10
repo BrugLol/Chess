@@ -74,7 +74,7 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
             if (from.first + 1 == to.first &&
                 board[to.first][to.second] == '*') {
             }
-            else if (from.first + 2 == to.first && from.first == 2) {
+            else if (from.first + 2 == to.first && from.first == 1) {
 
                 for (int i = from.first + direction; i <= to.first; i++) {
                     if (board[i][to.second] != '*') {
@@ -329,14 +329,16 @@ int main() {
 
     int turnOrder = 0;
     vector<vector<char>> board = {
-    {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
-    {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-    {'*', '*', '*', '*', '*', '*', '*', '*'},
-    {'*', '*', '*', '*', '*', '*', '*', '*'},
-    {'*', '*', '*', '*', '*', '*', '*', '*'},
-    {'*', '*', '*', '*', '*', '*', '*', '*'},
-    {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-    {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
+    {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', ' ', '8'},
+    {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', ' ', '7'},
+    {'*', '*', '*', '*', '*', '*', '*', '*', ' ', '6'},
+    {'*', '*', '*', '*', '*', '*', '*', '*', ' ', '5'},
+    {'*', '*', '*', '*', '*', '*', '*', '*', ' ', '4'},
+    {'*', '*', '*', '*', '*', '*', '*', '*', ' ', '3'},
+    {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', ' ', '2'},
+    {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R', ' ', '1'},
+    {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
     };
     
 
