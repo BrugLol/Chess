@@ -14,7 +14,7 @@ using namespace std;
 pair<int, int> FindKing(vector<vector<char>>& board, char king) {
     for (int row = 0; row < board.size(); row++) {
         for (int col = 0; col < board[row].size(); col++) {
-            if (board[row][col] == 'K') {
+            if (board[row][col] == king) {
                 return {row, col};
             }
         }
@@ -32,22 +32,236 @@ pair<int, int> LocalizePiece(vector<vector<char>>& board, string position) {
 
 bool InCheck(vector<vector<char>>& board, char king) {
     pair<int, int> KingPos = FindKing(board, king);
+    int knightMoves[8][2] = {
+    {-2, -1},
+    {-2,  1},
+    {-1, -2},
+    {-1,  2},
+    { 1, -2},
+    { 1,  2},
+    { 2, -1},
+    { 2,  1}
+    };
 
-    if (KingPos == {-1, -1}) {
-        return false;
+    if (KingPos.first == -1) {
+        cout << RED << "ERROR KING CANNOT BE FOUND!\n" << RESET;
+        return true;
     }
 
     int kx = KingPos.first; //Returns the row of the king
     int ky = KingPos.second; //Returns the col of the king
+    if (king == 'k') {
+        // Down
+        for (int row = kx + 1; row < 8; row++) {
+            if (board[row][ky] != '*') {
+                if (board[row][ky] == 'Q' || board[row][ky] == 'R') {
+                    return true;
+                }
+
+                break;
+            }
+        }
+        
+        // Up
+        for (int row = kx - 1; row >= 0; row--) {
+            if (board[row][ky] != '*') {
+                if (board[row][ky] == 'Q' || board[row][ky] == 'R')
+                    return true;
+                break;
+            }
+        }
+
+        // Right
+        for (int col = ky + 1; col < 8; col++) {
+            if (board[kx][col] != '*') {
+                if (board[kx][col] == 'Q' || board[kx][col] == 'R')
+                    return true;
+                break;
+            }
+        }
+
+        // Left
+        for (int col = ky - 1; col >= 0; col--) {
+            if (board[kx][col] != '*') {
+                if (board[kx][col] == 'Q' || board[kx][col] == 'R')
+                    return true;
+                break;
+            }
+        }
+
+        // Up Right
+        for (int row = kx - 1, col = ky + 1; row >= 0 && col < 8; row--, col++) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'Q' || board[row][col] == 'B')
+                    return true;
+                break;
+            }
+        }
+
+        //Down Right
+        for (int row = kx + 1, col = ky + 1; row < 8 && col < 8; row++, col++) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'Q' || board[row][col] == 'B')
+                    return true;
+                break;
+            }
+        }
+
+        //Up Left
+        for (int row = kx - 1, col = ky - 1; row >= 0 && col >= 0; row--, col--) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'Q' || board[row][col] == 'B')
+                    return true;
+                break;
+            }
+        }
+
+        //Down Left
+        for (int row = kx + 1, col = ky - 1; row < 8 && col >= 0; row++, col--) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'Q' || board[row][col] == 'B')
+                    return true;
+                break;
+            }
+        }
 
 
+        //Knight
+        for (auto& move : knightMoves) {
+            int row = kx + move[0];
+            int col = ky + move[1];
+
+            if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+                if (board[row][col] == 'N') {
+                    return true;
+                }
+            }
+        }
+
+        //Pawn
+        if (kx - 1 >= 0) {
+            if (ky - 1 >= 0 && board[kx - 1][ky - 1] == 'P') {
+                return true;
+            }
+            if (ky + 1 < 8 && board[kx - 1][ky + 1] == 'P') {
+                return true;
+            }
+        }
+    }
+
+    if (king == 'K') {
+        // Down
+        for (int row = kx + 1; row < 8; row++) {
+            if (board[row][ky] != '*') {
+                if (board[row][ky] == 'q' || board[row][ky] == 'r') {
+                    return true;
+                }
+
+                break;
+            }
+        }
+        
+        // Up
+        for (int row = kx - 1; row >= 0; row--) {
+            if (board[row][ky] != '*') {
+                if (board[row][ky] == 'q' || board[row][ky] == 'r')
+                    return true;
+                break;
+            }
+        }
+
+        // Right
+        for (int col = ky + 1; col < 8; col++) {
+            if (board[kx][col] != '*') {
+                if (board[kx][col] == 'q' || board[kx][col] == 'r')
+                    return true;
+                break;
+            }
+        }
+
+        // Left
+        for (int col = ky - 1; col >= 0; col--) {
+            if (board[kx][col] != '*') {
+                if (board[kx][col] == 'q' || board[kx][col] == 'r')
+                    return true;
+                break;
+            }
+        }
+
+        // Up Right
+        for (int row = kx - 1, col = ky + 1; row >= 0 && col < 8; row--, col++) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'q' || board[row][col] == 'b')
+                    return true;
+                break;
+            }
+        }
+
+        //Down Right
+        for (int row = kx + 1, col = ky + 1; row < 8 && col < 8; row++, col++) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'q' || board[row][col] == 'b')
+                    return true;
+                break;
+            }
+        }
+
+        //Up Left
+        for (int row = kx - 1, col = ky - 1; row >= 0 && col >= 0; row--, col--) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'q' || board[row][col] == 'b')
+                    return true;
+                break;
+            }
+        }
+
+        //Down Left
+        for (int row = kx + 1, col = ky - 1; row < 8 && col >= 0; row++, col--) {
+            if (board[row][col] != '*') {
+                if (board[row][col] == 'q' || board[row][col] == 'b')
+                    return true;
+                break;
+            }
+        }
+
+
+        //Knight
+        for (auto& move : knightMoves) {
+            int row = kx + move[0];
+            int col = ky + move[1];
+
+            if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+                if (board[row][col] == 'n') {
+                    return true;
+                }
+            }
+        }
+
+        //Pawn
+        if (kx + 1 < 8) {
+            if (ky + 1 < 8 && board[kx + 1][ky + 1] == 'p') {
+                return true;
+            }
+            if (ky - 1 >= 0 && board[kx + 1][ky - 1] == 'p') {
+                return true;
+            }
+        }
+    }
+
+
+    return false;
 }
 
-bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char p) {
-    if (isupper(board[to.first][to.second]) && isupper(p) || islower(board[to.first][to.second]) && islower(p)) {
+bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char p, bool& wCheck, bool& bCheck) {
+    if ((isupper(board[to.first][to.second]) && isupper(p)) || (islower(board[to.first][to.second]) && islower(p))) {
         cout << "Pieces have not unlocked phantasmal abilities yet.\n";
         return false;
     } //Tried to move piece to a position occupied by the same team piece.
+
+    char CapturedPiece = board[to.first][to.second]; //Saves captured piece.
+
+    
+
 
     int direction;
     int rowDir;
@@ -88,6 +302,20 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
             return false;
         }
 
+        board[to.first][to.second] = board[from.first][from.second];
+        board[from.first][from.second] = '*'; // Temp Move
+        if (InCheck(board, 'K')) {
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+
+            cout << "The WHITE king is in check!\n";
+            return false;
+        }
+        board[from.first][from.second] = p;
+        board[to.first][to.second] = CapturedPiece;
+        //Re-do
+
     return true;
     } else if (p == 'p') {
          direction = 1;
@@ -107,8 +335,7 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
                     }
                 }
 
-            }
-            else {
+            } else {
                 return false;
             }
 
@@ -123,6 +350,20 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
             cout << "Tried to move piece sideways! Or you moved more spaces \n";
             return false;
         }
+
+        board[to.first][to.second] = board[from.first][from.second];
+        board[from.first][from.second] = '*';
+        if (InCheck(board, 'k')) {
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+
+            cout << "The BLACK king is in check!\n";
+            return false;
+        }
+        board[from.first][from.second] = p;
+        board[to.first][to.second] = CapturedPiece;
+        //Re-do
 
     return true;
     }
@@ -162,6 +403,38 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
             }   
         } else {
             return false;
+        }
+
+        if (isupper(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*'; // Temp Move
+            if (InCheck(board, 'K')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The WHITE king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+        }
+
+        if (islower(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*';
+            if (InCheck(board, 'k')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The BLACK king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
         }
     }
 
@@ -208,25 +481,121 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
                 }
             } 
 
+            if (isupper(p)) {
+                board[to.first][to.second] = board[from.first][from.second];
+                board[from.first][from.second] = '*'; // Temp Move
+                if (InCheck(board, 'K')) {
+                    board[from.first][from.second] = p;
+                    board[to.first][to.second] = CapturedPiece;
+                    //Re-do
+
+                    cout << "The WHITE king is in check!\n";
+                    return false;
+                }
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+            }
+
+            if (islower(p)) {
+                board[to.first][to.second] = board[from.first][from.second];
+                board[from.first][from.second] = '*';
+                if (InCheck(board, 'k')) {
+                    board[from.first][from.second] = p;
+                    board[to.first][to.second] = CapturedPiece;
+                    //Re-do
+
+                    cout << "The BLACK king is in check!\n";
+                    return false;
+                }
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+            }
         } else {
             return false;
         }
     }
 
     if (p == 'N' || p == 'n') {
-        if (abs(to.first - from.first) == 2 && abs(to.second - from.second) == 1 || abs(to.first - from.first) == 1 && abs(to.second - from.second) == 2) {
-            return true;
-        } else {
-            return false;
-        } 
-    }
+        if ((abs(to.first - from.first) == 2 && abs(to.second - from.second) == 1) || (abs(to.first - from.first) == 1 && abs(to.second - from.second) == 2)) {
+            if (isupper(p)) {
+                board[to.first][to.second] = board[from.first][from.second];
+                board[from.first][from.second] = '*'; // Temp Move
+                if (InCheck(board, 'K')) {
+                    board[from.first][from.second] = p;
+                    board[to.first][to.second] = CapturedPiece;
+                    //Re-do
 
-    if (p == 'K' || p == 'k') {
-        if (abs(to.first - from.first) <= 1 && abs(to.second - from.second) <= 1 && from != to) {
+                    cout << "The WHITE king is in check!\n";
+                    return false;
+                }
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+            }
+
+            if (islower(p)) {
+                board[to.first][to.second] = board[from.first][from.second];
+                board[from.first][from.second] = '*';
+                if (InCheck(board, 'k')) {
+                    board[from.first][from.second] = p;
+                    board[to.first][to.second] = CapturedPiece;
+                    //Re-do
+
+                    cout << "The BLACK king is in check!\n";
+                    return false;
+                }
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+            }
             return true;
+
         } else {
             return false;
         }
+
+        
+    }
+
+    if (p == 'K' || p == 'k') {
+        if (!(abs(to.first - from.first) <= 1 && abs(to.second - from.second) <= 1 && from != to)) {
+            return false;
+        }
+
+        if (isupper(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*'; // Temp Move
+            if (InCheck(board, 'K')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The WHITE king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+        }
+
+        if (islower(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*';
+            if (InCheck(board, 'k')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The BLACK king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+        }
+        return true;
     }
 
     if (p == 'Q' || p == 'q') {
@@ -302,18 +671,49 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
                         return false;
                     }
                 }
-            } 
+            }
         }
-        
         else {
             return false;
+        }
+
+        if (isupper(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*'; // Temp Move
+            if (InCheck(board, 'K')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The WHITE king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
+        }
+
+        if (islower(p)) {
+            board[to.first][to.second] = board[from.first][from.second];
+            board[from.first][from.second] = '*';
+            if (InCheck(board, 'k')) {
+                board[from.first][from.second] = p;
+                board[to.first][to.second] = CapturedPiece;
+                //Re-do
+
+                cout << "The BLACK king is in check!\n";
+                return false;
+            }
+            board[from.first][from.second] = p;
+            board[to.first][to.second] = CapturedPiece;
+            //Re-do
         }
     }
 
     return true;
 }
 
-void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char& p) {
+void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char& p, bool& wCheck, bool& bCheck) {
     board[to.first][to.second] = board[from.first][from.second];
     board[from.first][from.second] = '*';
 
@@ -322,6 +722,11 @@ void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> 
     } else if (p == 'p' && to.first == 7) {
         board[to.first][to.second] = 'q';
     }
+
+    wCheck = InCheck(board, 'K');
+    bCheck = InCheck(board, 'k');
+
+    
 }
 
 void DrawBoard(vector<vector<char>>& board) {
@@ -353,6 +758,8 @@ int main() {
     const int sizex = 8; 
     const int sizey = 8;
 
+    bool whiteCheck = false;
+    bool blackCheck = false;
     pair<int, int> selectPos;
     pair<int, int> lastPos;
     char piece;
@@ -415,8 +822,9 @@ int main() {
                 } else {
                     lastPos = LocalizePiece(board, position);
 
-                    if (IsValidPos(board, selectPos, lastPos, piece)) {
-                        MovePiece(board, selectPos, lastPos, piece);
+                    if (IsValidPos(board, selectPos, lastPos, piece, whiteCheck, blackCheck)) {
+                        MovePiece(board, selectPos, lastPos, piece, whiteCheck, blackCheck);
+
                         turnOrder = 1;
                     } else {
                         cout << "Invalid move!" << endl;
@@ -440,8 +848,9 @@ int main() {
                 } else {
                     lastPos = LocalizePiece(board, position);
 
-                    if (IsValidPos(board, selectPos, lastPos, piece)) {
-                        MovePiece(board, selectPos, lastPos, piece);
+                    if (IsValidPos(board, selectPos, lastPos, piece, whiteCheck, blackCheck)) {
+                        MovePiece(board, selectPos, lastPos, piece, whiteCheck, blackCheck);
+
                         turnOrder = 0;
                     } else {
                         cout << "Invalid move!" << endl;
