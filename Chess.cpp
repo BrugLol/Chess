@@ -288,9 +288,15 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
     return true;
 }
 
-void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to) {
+void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char& p) {
     board[to.first][to.second] = board[from.first][from.second];
     board[from.first][from.second] = '*';
+
+    if (p == 'P' && to.first == 0) {
+        board[to.first][to.second] = 'Q';
+    } else if (p == 'p' && to.first == 7) {
+        board[to.first][to.second] = 'q';
+    }
 }
 
 void DrawBoard(vector<vector<char>>& board) {
@@ -385,8 +391,8 @@ int main() {
                     lastPos = LocalizePiece(board, position);
 
                     if (IsValidPos(board, selectPos, lastPos, piece)) {
-                        MovePiece(board, selectPos, lastPos);
-                        turnOrder = 1;
+                        MovePiece(board, selectPos, lastPos, piece);
+                        //turnOrder = 1;
                     } else {
                         cout << "Invalid move!" << endl;
                         Sleep(1000);
@@ -410,7 +416,7 @@ int main() {
                     lastPos = LocalizePiece(board, position);
 
                     if (IsValidPos(board, selectPos, lastPos, piece)) {
-                        MovePiece(board, selectPos, lastPos);
+                        MovePiece(board, selectPos, lastPos, piece);
                         turnOrder = 0;
                     } else {
                         cout << "Invalid move!" << endl;
