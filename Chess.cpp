@@ -713,6 +713,46 @@ bool IsValidPos(vector<vector<char>>& board, pair<int, int> from, pair<int, int>
     return true;
 }
 
+bool IsCheckmate(vector<vector<char>>& board, char king,
+                 bool& wCheck, bool& bCheck) {
+
+    if (!InCheck(board, king))
+        return false;
+
+    bool white = (king == 'K');
+
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+
+            char piece = board[row][col];
+
+            if (piece == '*')
+                continue;
+
+            if (white && !isupper(piece))
+                continue;
+
+            if (!white && !islower(piece))
+                continue;
+
+            pair<int, int> from = {row, col};
+
+            for (int toRow = 0; toRow < 8; toRow++) {
+                for (int toCol = 0; toCol < 8; toCol++) {
+
+                    pair<int, int> to = {toRow, toCol};
+
+                    if (IsValidPos(board, from, to, piece, wCheck, bCheck)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 void MovePiece(vector<vector<char>>& board, pair<int, int> from, pair<int, int> to, char& p, bool& wCheck, bool& bCheck) {
     board[to.first][to.second] = board[from.first][from.second];
     board[from.first][from.second] = '*';
@@ -825,6 +865,11 @@ int main() {
                     if (IsValidPos(board, selectPos, lastPos, piece, whiteCheck, blackCheck)) {
                         MovePiece(board, selectPos, lastPos, piece, whiteCheck, blackCheck);
 
+                        if (IsCheckmate(board, 'k', whiteCheck, blackCheck)) {
+                            cout << "CHECKMATE! WHITE WINS!\n";
+                            return 0;
+                        }
+
                         turnOrder = 1;
                     } else {
                         cout << "Invalid move!" << endl;
@@ -850,6 +895,11 @@ int main() {
 
                     if (IsValidPos(board, selectPos, lastPos, piece, whiteCheck, blackCheck)) {
                         MovePiece(board, selectPos, lastPos, piece, whiteCheck, blackCheck);
+
+                        if (IsCheckmate(board, 'K', whiteCheck, blackCheck)) {
+                            cout << "CHECKMATE! BLACK WINS!\n";
+                            return 0;
+                        }
 
                         turnOrder = 0;
                     } else {
